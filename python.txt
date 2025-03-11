@@ -1,0 +1,30 @@
+pip install pandas xlrd
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+Orders_data = pd.read_excel(r"C:\Users\pc\Downloads\sample_-_superstore.xlsx")
+Orders_data.head()
+Returned_data=pd.read_excel(r"C:\Users\pc\OneDrive\Documenten\returnsdata.xlsx")
+Returned_data.head()
+People_data=pd.read_excel(r"C:\Users\pc\OneDrive\Documenten\peopledata.xlsx")
+People_data.head()
+df_merged = Orders_data.merge(Returned_data, on="Order ID", how="left")
+df_merged.head()
+Final_merged_data=df_merged.merge(People_data, on="Region", how="left")
+Final_merged_data.head()
+Final_merged_data["Returned"].fillna("No", inplace=True)
+Final_merged_data.head()
+Final_merged_data.info()
+print(Final_merged_data.describe())
+Final_merged_data["Discount Value"]=Final_merged_data["Total Sales Before Discount"]-Final_merged_data["Total Sales After Discount"]
+Final_merged_data.head()
+Final_merged_data["Year"] = Final_merged_data["Ship Date"].dt.year
+Final_merged_data["Month"] = Final_merged_data["Order Date"].dt.strftime("%B") 
+Final_merged_data.head() 
+Final_merged_data["Processing Days"] = (Final_merged_data["Ship Date"] - Final_merged_data["Order Date"]).dt.days
+Final_merged_data.head()
+print(Final_merged_data.isnull().sum())
+Final_merged_data.duplicated().sum()
+File_path = r"C:\Users\pc\Downloads\cleaned_data.xlsx"
+Final_merged_data.to_excel(File_path, index=False, engine="openpyxl")
+print("File saved at:", File_path)
