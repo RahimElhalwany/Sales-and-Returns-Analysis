@@ -1,0 +1,12 @@
+SELECT 
+    dd.*, 
+    CASE 
+        WHEN rr.order_id IS NOT NULL THEN 'yes' 
+        ELSE 'no' 
+    END AS is_returned
+FROM 
+    data dd
+LEFT JOIN 
+    salesperson sp ON dd.region = sp.region ,
+   LEFT JOIN 
+    returns rr ON dd.order_id = rr.order_id;
